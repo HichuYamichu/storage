@@ -1,0 +1,31 @@
+version: '3.4'
+
+x-defaults: &defaults
+  restart: unless-stopped
+  networks:
+    - main
+  logging:
+    driver: loki
+    options:
+      loki-url: "http://localhost:3100/api/prom/push"
+  
+services:
+  redis:
+    <<: *defaults
+    image: redis:alpine
+
+  postgres:
+    <<: *defaults
+    image: postgres:alpine
+    env_file:
+      - ./.env
+    volumes:
+       - postgres_vol:/var/lib/postgresql/data
+       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  
+networks:
+  main:
+    external: true
+
+volumes:
+  postgres_vol:
