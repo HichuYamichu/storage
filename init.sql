@@ -1,2 +1,1 @@
-CREATE DATABASE sentry;
 CREATE DATABASE junko;
